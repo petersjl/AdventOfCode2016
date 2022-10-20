@@ -12,3 +12,13 @@ String to_abs_path(path,[base_dir = null]){
   path = context.join( base_dir,path);
   return context.normalize(path);
 }
+
+extension StringExtras on String{
+  Iterable get characters {
+    return this.split('');
+  }
+
+  List<String> splitNewLine(){
+    return this.split('\r\n');
+  }
+}
