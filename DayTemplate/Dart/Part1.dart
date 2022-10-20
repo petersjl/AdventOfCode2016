@@ -1,5 +1,5 @@
 import 'dart:io';
-import '../../DartUtils.dart' as Utils;
+import '../../DartUtils.dart';
 
 void main(){
   Stopwatch stopwatch = new Stopwatch()..start();

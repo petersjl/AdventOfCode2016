@@ -1,5 +1,5 @@
 import 'dart:io';
-import '../../DartUtils.dart' as Utils;
+import '../../DartUtils.dart';
 
 void main(){
   Stopwatch stopwatch = new Stopwatch()..start();
@@ -18,18 +18,6 @@ enum Direction{
   South,
   East,
   West
-}
-
-class Point{
-  int x, y;
-  Point(this.x, this.y);
-
-  @override
-  String toString(){
-    return '${this.x}, ${this.y}';
-  }
-
-  int get hashCode => 100000 * this.x + this.y;
 }
 
 // The main method of the puzzle solve
