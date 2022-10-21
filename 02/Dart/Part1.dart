@@ -15,7 +15,7 @@ Object parseInput([bool test = false]){
 
 // The main method of the puzzle solve
 void solvePuzzle(){
-  List<String> input = parseInput();
+  List<String> input = parseInput() as List<String>;
   int num = 5;
   String code = '';
   for (String line in input){

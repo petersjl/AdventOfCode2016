@@ -22,7 +22,7 @@ enum Direction{
 
 // The main method of the puzzle solve
 void solvePuzzle(){
-  List<String> input = parseInput();
+  List<String> input = parseInput() as List<String>;
   Direction currentDirection = Direction.North;
   Point location = Point(0,0);
   for (String str in input){

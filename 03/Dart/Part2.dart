@@ -16,7 +16,7 @@ Object parseInput([bool test = false]){
 // The main method of the puzzle solve
 void solvePuzzle(){
   int count = 0;
-  List<String> input = parseInput();
+  List<String> input = parseInput() as List<String>;
   for(int i = 0; i < input.length;){
     var parts0 = input[i].split(new RegExp('\\s+'))..removeAt(0);
     var parts1 = input[i+1].split(new RegExp('\\s+'))..removeAt(0);

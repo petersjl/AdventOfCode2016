@@ -15,12 +15,12 @@ Object parseInput([bool test = false]){
 
 // The main method of the puzzle solve
 void solvePuzzle(){
-  List<String> input = parseInput();
+  List<String> input = parseInput() as List<String>;
   Point num = new Point(2, 0);
   String code = '';
   for (String line in input){
     num = getButton(num, line);
-    code += getButtonVal(num);
+    code += getButtonVal(num)!;
   }
   print('The bathroom code is $code');
 }
@@ -51,7 +51,7 @@ Point getButton(Point startButton, String instructions){
   return new Point(row, col);
 }
 
-String getButtonVal(Point button){
+String? getButtonVal(Point button){
   switch(button.x){
     case 0: return button.y == 2 ? '1' : null;
     case 1: return button.y > 0 && button.y < 4 ? (button.y + 1).toString() : null;
