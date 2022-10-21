@@ -27,6 +27,16 @@ extension StringExtras on String{
   }
 }
 
+extension ListMap on List{
+  List<T> listMap<T>(Function fun){
+    List<T> list = [];
+    for (Object e in this){
+      list.add(fun(e));
+    }
+    return list;
+  }
+}
+
 // Classes
 class Point{
   int x, y;
