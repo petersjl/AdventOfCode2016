@@ -8,3 +8,4 @@ Calendar:
 - Day 4: Security Through Obscurity
 - Day 5: How About a Nice Game of Chess?
 - Day 6: Signals and Noise
+- Day 7: Internet Protocol Version 7
