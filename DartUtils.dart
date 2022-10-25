@@ -43,6 +43,22 @@ extension MapExtras on Map<dynamic, int>{
   }
 }
 
+extension GenericMapExtras on Map<dynamic, dynamic>{
+  bool where(bool test(dynamic key, dynamic value)){
+    for(MapEntry entry in this.entries){
+      if(test(entry.key, entry.value)) return true;
+    }
+    return false;
+  }
+  
+  dynamic whereFirst(bool test(dynamic key, dynamic value)){
+    for(MapEntry entry in this.entries){
+      if(test(entry.key, entry.value)) return entry.value;
+    }
+    return null;
+  }
+}
+
 // Classes
 class Point{
   int x, y;
