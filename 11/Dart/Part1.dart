@@ -32,6 +32,7 @@ Object parseInput([bool test = false]){
 // The main method of the puzzle solve
 void solvePuzzle(){
   var start = parseInput() as Building;
+  // print(start.identity());
   // Start a priority queue where we sort by smallest number of steps taken and then building score
   var queue = PriorityQueue<Pair<int,Building>>((queueItem, toInsert) {
     if(queueItem.first == toInsert.first) return queueItem.second.score - toInsert.second.score;
@@ -39,7 +40,7 @@ void solvePuzzle(){
   });
   Set seen = Set<String>(); // Keep track of what we have seen
   queue.enqueue(Pair(0,start)); // Start with the given building with zero steps
-  seen.add(start.hashString()); // Mark that we have seen it
+  seen.add(start.identity()); // Mark that we have seen it
   Pair<int, Building>? found;
   var runningIndex = 0;
   while(queue.length != 0){
@@ -58,14 +59,16 @@ void solvePuzzle(){
         queue.clear(); // Clear the list to exit the while loop
         break;
       }
-      if(seen.add(move.hashString())){ // If we haven't yet seen this building state
+      if(seen.add(move.identity())){ // If we haven't yet seen this building state
         queue.enqueue(newPair); // put it in the queue
       }
     }
   }
   if(found == null) print('No valud solutions found');
-  else print('Solution found in ${found.first} moves, score ${found.second.score}\n');
-  found?.second.printPath();
+  else {
+    found.second.printPath();
+    print('Solution found in ${found.first} moves');
+  }
 }
 
 class Building{
@@ -73,7 +76,8 @@ class Building{
   int elevatorPos;
   Building():floors = [[],[],[],[]], elevatorPos = 0;
 
-  int get hashCode => hashString().hashCode;
+  @override
+  int get hashCode => identity().hashCode;
 
   bool get completed => score == 0;
   int get score => ((floors[0].length * 5) + (floors[1].length * 3) + (floors[2].length * 1)); // Lower scores are closer to complete
@@ -167,27 +171,25 @@ class Building{
     return newBuild;
   }
 
-  // Pairs of chip and generator are interchangeable so we only care about the distance
-  // between each chip and it's generator. Then we sort that list of distances so that
-  // lines of the same equivalent value will give the same string of scores
-  String lineScore(int index){
-    var floor = floors[index];
-    List<int> scores = [];
-    for(Pair<bool,String> item in floor){
-      for(int i = 0; i < floors.length; ++i){
-        bool found = false;
-        for(Pair<bool,String> thing in floors[i]){
-          if(thing.first == item.first) continue;
-          if(thing.second == item.second) {
-            found = true;
-            scores.add((i - index).abs());
-          }
+  // Pairs of chip and generator are interchangeable so we anonymise the
+  // chip, gen pairs into which floors they are on. Then we sort the pairs
+  // to make sure any equivalent states will get the same string
+  String identity(){
+    Map<String, Pair<int,int>> scoreMap = {};
+    for(int i = 0; i < floors.length; i++){
+      var floor = floors[i];
+      for(Pair<bool,String> item in floor){
+        if(item.first){
+          scoreMap.update(item.second, (pair) { pair.first = i; return pair;}, ifAbsent: () => Pair(i, -1));
         }
-        if(found) break;
+        else{
+          scoreMap.update(item.second, (pair) { pair.second = i; return pair;}, ifAbsent: () => Pair(-1, i));
+        }
       }
     }
-    scores.sort();
-    return score.toString();
+    List<Pair<int,int>> scores = [...scoreMap.values];
+    scores.sort((p1,p2) => p1.first == p2.first ? p1.second - p2.second : p1.first - p2.first );
+    return '$elevatorPos$scores';
   }
 
   // Create an exact, sorted string representation of a floor
@@ -219,19 +221,6 @@ class Building{
       }
       str.write('G${lowest.second}');
       gens.removeAt(lowi);
-    }
-    return str.toString();
-  }
-
-  // Create a string that will only be the same when the buildings are equivalent
-  String hashString(){
-    StringBuffer str = StringBuffer('epos');
-    str.write(elevatorPos);
-    for(int i = 0; i < floors.length; ++i){
-      str.write('llen');
-      str.write(floors[i].length);
-      str.write('ln${i}sc');
-      str.write(lineString(i));
     }
     return str.toString();
   }

@@ -88,6 +88,9 @@ class Pair<T1, T2> extends Object{
   T2 second;
   int get length => 2;
 
+  @override
+  int get hashCode => '${first.hashCode}${second.hashCode}'.hashCode;
+
   Pair(this.first, this.second);
 
   operator [](int index){
