@@ -39,7 +39,6 @@ int getButton(int startButton, String instructions){
       default:
         print('Invalid character in getButton: $s');
         continue;
-        break;
     }
     if (row < 0) row = 0;
     else if (row > 2) row = 2;

@@ -41,7 +41,6 @@ Point getButton(Point startButton, String instructions){
       default:
         print('Invalid character in getButton: $s');
         continue;
-        break;
     }
     if(getButtonVal(new Point(newRow, newCol)) != null){
       row = newRow;
@@ -58,11 +57,11 @@ String? getButtonVal(Point button){
     case 2: return button.y > -1 && button.y < 5 ? (button.y + 5).toString() : null;
     case 3: 
       switch(button.y){
-        case 1: return 'A'; break;
-        case 2: return 'B'; break;
-        case 3: return 'C'; break;
+        case 1: return 'A';
+        case 2: return 'B';
+        case 3: return 'C';
         default: return null;
-      } break;
+      }
     case 4: return button.y == 2 ? 'D' : null;
     default: return null;
   }

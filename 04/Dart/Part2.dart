@@ -15,7 +15,6 @@ Object parseInput([bool test = false]){
 
 // The main method of the puzzle solve
 void solvePuzzle(){
-  int count = 0;
   for(String line in parseInput() as List<String>){
     var roomValue = getValueOfRoomString(line);
     if (roomValue != 0){
@@ -28,7 +27,6 @@ void solvePuzzle(){
 String decryptName(String roomString){
   List<String> parts = roomString.split(new RegExp('-|\\[|\\]'));
   parts.removeLast(); // Remove the empty piece
-  String checksum = parts.removeLast();
   int roomValue = int.parse(parts.removeLast());
   String name = '';
   for (String code in parts){

@@ -45,10 +45,9 @@ void progress(Point point, int distance, Direction direction){
 
 Direction turn(Direction current, bool isRightTurn){
   switch(current){
-    case Direction.North: return isRightTurn ? Direction.East : Direction.West; break;
-    case Direction.South: return isRightTurn ? Direction.West : Direction.East; break;
-    case Direction.East: return isRightTurn ? Direction.South : Direction.North; break;
-    case Direction.West: return isRightTurn ? Direction.North : Direction.South; break;
+    case Direction.North: return isRightTurn ? Direction.East : Direction.West;
+    case Direction.South: return isRightTurn ? Direction.West : Direction.East;
+    case Direction.East: return isRightTurn ? Direction.South : Direction.North;
+    case Direction.West: return isRightTurn ? Direction.North : Direction.South;
   }
-  return Direction.North;
 }
