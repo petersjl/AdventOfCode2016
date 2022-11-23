@@ -27,13 +27,26 @@ extension StringExtras on String{
   }
 }
 
-extension ListMap on List{
+extension GenericListExtras on List{
   List<T> listMap<T>(Function fun){
     List<T> list = [];
-    for (Object e in this){
+    for(Object e in this){
       list.add(fun(e));
     }
     return list;
+  }
+
+  List<T> listWhere<T>(bool fun(element)){
+    List<T> list = [];
+    for(T e in this){
+      if(fun(e)) list.add(e);
+    }
+    return list;
+  }
+
+  dynamic whereFirst(bool fun(element)){
+    for(Object e in this) if(fun(e)) return e;
+    return null;
   }
 }
 
@@ -67,5 +80,73 @@ class Point{
   @override
   String toString(){
     return '${this.x}, ${this.y}';
+  }
+}
+
+class Pair<T1, T2> extends Object{
+  T1 first;
+  T2 second;
+  int get length => 2;
+
+  Pair(this.first, this.second);
+
+  operator [](int index){
+    if(index == 0) return first;
+    if(index == 1) return second;
+    throw IndexError(index, this);
+  }
+  
+  @override
+  operator ==(Object other){
+    if(other is! Pair) return false;
+    return first == other.first 
+        && second == other.second;
+  }
+
+  @override
+  String toString(){
+    return '($first, $second)';
+  }
+}
+
+class PriorityQueue<T>{
+  int _size = 0;
+  List<T> _array;
+  Function _comparator;
+
+  int get length => _size;
+
+  PriorityQueue(int fun(T queueItem,T toInsert)): _comparator = fun, _array = [];
+
+  void enqueue(T object){
+    for(int i = 0; i < _array.length; ++i){
+      T thing = _array[i];
+      if(0 < _comparator(thing, object)){
+        _array.insert(i, object);
+        _size++;
+        return;
+      }
+    }
+    _array.add(object);
+    _size++;
+    return;
+  }
+
+  T dequeue(){
+    _size--;
+    return _array.removeAt(0);
+  }
+
+  void clear(){
+    _array.clear();
+    _size = 0;
+  }
+
+  @override
+  String toString(){
+    StringBuffer str = StringBuffer('[');
+    str.writeAll(_array, ',');
+    str.write(']');
+    return str.toString();
   }
 }
