@@ -19,12 +19,12 @@ Object parseInput([bool test = false]){
 void solvePuzzle(){
   var salt = parseInput() as String;
   int index = -1;
-  List<String> queue = List.generate(1000, (i) => generateMd5(salt + i.toString()));
+  List<String> queue = List.generate(1000, (i) => generateStretchHash(salt + i.toString()));
   int count = 0;
   while(count < 64){
     index++;
     var hash = queue.removeAt(0);
-    queue.add(generateMd5(salt + (index + 1000).toString()));
+    queue.add(generateStretchHash(salt + (index + 1000).toString()));
     var term = charRun(hash, 3);
     if(term != null){
       for(var s in queue){
@@ -36,6 +36,14 @@ void solvePuzzle(){
     }
   }
   print("The last has was found at index ${index}");
+}
+
+String generateStretchHash(String input){
+  var hash = generateMd5(input);
+  for(int i = 0; i < 2016; ++i){
+    hash = generateMd5(hash);
+  }
+  return hash;
 }
 
 String generateMd5(String input) {
