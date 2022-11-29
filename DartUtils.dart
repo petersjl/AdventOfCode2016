@@ -78,6 +78,15 @@ class Point{
   Point(this.x, this.y);
 
   @override
+  int get hashCode => '${x}${y}'.hashCode;
+
+  @override
+  operator ==(Object other){
+    if(other is! Point) return false;
+    return hashCode == other.hashCode;
+  }
+
+  @override
   String toString(){
     return '${this.x}, ${this.y}';
   }
