@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:crypto/crypto.dart';
 import 'package:path/path.dart' as Path;
 import 'dart:io' show Platform;
 
@@ -13,6 +15,10 @@ class Utils{
     base_dir ??= Path.dirname(Platform.script.toFilePath());
     path = context.join( base_dir,path);
     return context.normalize(path);
+  }
+
+  String generateMd5(String input) {
+    return md5.convert(utf8.encode(input)).toString();
   }
 }
 
