@@ -24,7 +24,7 @@ class Utils{
 
 // Extensions
 extension StringExtras on String{
-  Iterable get characters {
+  List<String> get characters {
     return this.split('');
   }
 
