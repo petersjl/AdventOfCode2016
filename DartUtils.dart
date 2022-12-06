@@ -168,3 +168,175 @@ class PriorityQueue<T>{
     return str.toString();
   }
 }
+
+class Binode<T> {
+  T value;
+  Binode<T>? prev;
+  Binode<T>? next;
+
+  Binode(this.value);
+}
+
+class Stack<T>{
+  int _size;
+  int get length => _size;
+
+  bool get isEmpty => _size == 0;
+
+  Binode<T>? _top;
+  Binode<T>? _bottom;
+
+  Stack():_size = 0;
+
+  void push(T item){
+    Binode<T> node = Binode(item);
+    if(_size == 0){
+      _top = node;
+      _bottom = node;
+    }
+    else{
+      _top!.next = node;
+      node.prev = _top;
+      _top = node;
+    }
+    _size++;
+  }
+
+  void pushBottom(T item){
+    Binode<T> node = Binode(item);
+    if(_size == 0){
+      _top = node;
+      _bottom = node;
+    }
+    else{
+      _bottom!.prev = node;
+      node.next = _bottom;
+      _bottom = node;
+    }
+    _size++;
+  }
+
+  T pop(){
+    if(_size == 0) throw new RangeError("Pop called on empty stack");
+    var val = _top!.value;
+    if(_size == 1){
+      _top = null;
+      _bottom = null;
+    }
+    else{
+      _top = _top!.prev;
+    }
+    _size--;
+    return val;
+  }
+
+  T popBottom(){
+    if(_size == 0) throw new RangeError("Pop called on empty stack");
+    var val = _bottom!.value;
+    if(_size == 1){
+      _top = null;
+      _bottom = null;
+    }
+    else{
+      _bottom = _bottom!.next;
+    }
+    _size--;
+    return val;
+  }
+
+  @override
+  String toString(){
+    var buf = StringBuffer('Top{');
+    var cur = _top;
+    while(cur != null){
+      buf.write(cur.value);
+      buf.write(',');
+      cur = cur.prev;
+    }
+    var str = buf.toString();
+    if(_size > 0) str = str.substring(0, str.length - 1);
+    return str + '}Bottom';
+  }
+}
+
+class Queue<T>{
+  int _size;
+  int get length => _size;
+
+  bool get isEmpty => _size == 0;
+
+  Binode<T>? _start;
+  Binode<T>? _end;
+
+  Queue(): _size = 0;
+
+  void push(T item){
+    Binode<T> node = Binode(item);
+    if(_size == 0){
+      _start = node;
+      _end = node;
+    }
+    else{
+      _start!.prev = node;
+      node.next = _start;
+      _start = node;
+    }
+    _size++;
+  }
+
+  void pushEnd(T item){
+    Binode<T> node = Binode(item);
+    if(_size == 0){
+      _start = node;
+      _end = node;
+    }
+    else{
+      _end!.next = node;
+      node.prev = _end;
+      _end = node;
+    }
+    _size++;
+  }
+
+  T pop(){
+    if(_size == 0) throw new RangeError("Pop called on empty stack");
+    var val = _end!.value;
+    if(_size == 1){
+      _start = null;
+      _end = null;
+    }
+    else{
+      _end = _end!.prev;
+    }
+    _size--;
+    return val;
+  }
+
+  T popStart(){
+    if(_size == 0) throw new RangeError("Pop called on empty stack");
+    var val = _start!.value;
+    if(_size == 1){
+      _start = null;
+      _end = null;
+    }
+    else{
+      _start = _start!.next;
+    }
+    _size--;
+    return val;
+  }
+
+  @override
+  String toString(){
+    var buf = StringBuffer('Start{');
+    var cur = _start;
+    while(cur != null){
+      buf.write(cur.value);
+      buf.write(',');
+      cur = cur.next;
+    }
+    var str = buf.toString();
+    if(_size > 0) str = str.substring(0, str.length - 1);
+    return str + '}End';
+  }
+}
