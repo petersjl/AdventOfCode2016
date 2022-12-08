@@ -9,7 +9,7 @@ void main(){
 
 Object parseInput([bool test = false]){
   String filePath = Utils.to_abs_path(test ? '../testinput.txt' : '../input.txt');
-  Object input = File(filePath).readAsStringSync();
+  var input = File(filePath).readAsStringSync();
   return input;
 }
 
