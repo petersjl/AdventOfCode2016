@@ -8,7 +8,7 @@ void main(){
 }
 
 Object parseInput([bool test = false]){
-  String filePath = Utils.to_abs_path(test ? '../testinput.txt' : '../input.txt');
+  String filePath = Utils.to_abs_path(test ? '../testinput2.txt' : '../input2.txt');
   var input = File(filePath).readAsStringSync().splitNewLine();
   return input;
 }
@@ -17,7 +17,8 @@ Object parseInput([bool test = false]){
 void solvePuzzle(){
   var instructions = parseInput() as List<String>;
   var str = instructions.removeAt(0).characters;
-  for(var line in instructions){
+  var lookup = generateLookup(str.length);
+  for(var line in instructions.reversed){
     var parts = line.split(' ');
     switch(parts[0]){
       case 'swap':
@@ -28,7 +29,7 @@ void solvePuzzle(){
         switch(parts[1]){
           case 'left': rotate(str, int.parse(parts[2]), true); break;
           case 'right': rotate(str, int.parse(parts[2])); break;
-          default: rotateOn(str, parts[6]); break;
+          default: rotateOn(str, parts[6],lookup); break;
         }
         break;
       case 'reverse': reverse(str, int.parse(parts[2]), int.parse(parts[4])); break;
@@ -53,14 +54,23 @@ void swapLetter(List<String> str, String x, String y){
 
 void rotate(List<String> str, int count, [bool left = false]){
   for(int i = 0; i < count; ++i){
-    if(left) str.add(str.removeAt(0));
+    if(!left) str.add(str.removeAt(0));
     else str.insert(0, str.removeLast());
   }
 }
 
-void rotateOn(List<String> str, String char){
+void rotateOn(List<String> str, String char, Map<int,int> lookup){
   int index = str.indexOf(char);
-  rotate(str, index + (index > 3 ? 2 : 1));
+  rotate(str, lookup[index]!);
+}
+
+Map<int,int> generateLookup(int size){
+  Map<int,int> lookup = {};
+  for(int i = 0; i< size; i++){
+    int dist = (i + (i > 3 ? 2 : 1));
+    lookup[(i+dist)%size] = dist;
+  }
+  return lookup;
 }
 
 void reverse(List<String> str, int start, int end){
@@ -76,5 +86,5 @@ void reverse(List<String> str, int start, int end){
 }
 
 void move(List<String> str, int x, int y){
-  str.insert(y, str.removeAt(x));
+  str.insert(x, str.removeAt(y));
 }
