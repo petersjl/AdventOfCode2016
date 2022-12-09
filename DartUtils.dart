@@ -84,7 +84,7 @@ class Point{
   Point(this.x, this.y);
 
   @override
-  int get hashCode => '${x}${y}'.hashCode;
+  int get hashCode => '${x},${y}'.hashCode;
 
   @override
   operator ==(Object other){
