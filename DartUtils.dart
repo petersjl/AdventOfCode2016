@@ -42,7 +42,7 @@ extension GenericListExtras on List{
     return list;
   }
 
-  List<T> listWhere<T>(bool fun(element)){
+  List<T> listWhere<T>(bool fun(T element)){
     List<T> list = [];
     for(T e in this){
       if(fun(e)) list.add(e);
