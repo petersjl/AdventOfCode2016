@@ -12,35 +12,35 @@ Object parseInput([bool test = false]){
   var input = File(filePath).readAsStringSync().splitNewLine();
   var colLength = input.removeAt(0).length;
   input.removeAt(input.length - 1);
-  List<List<bool>> map = [];
-  map.add(List.filled(colLength, false));
+  List<List<int>> map = [];
+  map.add(List.filled(colLength, -1));
   List<Target> targets = [];
   int row = 1;
   for(var line in input){
     int col = 0;
-    List<bool> boolRow = List.filled(colLength, false);
+    List<int> boolRow = List.filled(colLength, -1);
     for(var char in line.characters){
       var check = int.tryParse(char);
       if(check != null){
         targets.add(Target(row, col, check));
-        boolRow[col] = true;
+        boolRow[col] = 1;
       }
       else{
-        boolRow[col] = char == ".";
+        boolRow[col] = char == "." ? 0 : -1;
       }
       col++;
     }
     row++;
     map.add(boolRow);
   }
-  map.add(List.filled(colLength, false));
+  map.add(List.filled(colLength, -1));
   return [map,targets];
 }
 
 // The main method of the puzzle solve
 void solvePuzzle(){
-  var input = parseInput() as List;
-  var map = input[0] as List<List<bool>>;
+  var input = parseInput(true) as List;
+  var map = input[0] as List<List<int>>;
   var targets = input[1] as List<Target>;
   
   Map<int,Map<int,int>> allPaths = {};
@@ -53,7 +53,7 @@ void solvePuzzle(){
   print(allPaths);
 }
 
-Map<int,int> bfs(Point startingPos, List<Target> targets, List<List<bool>> map){
+Map<int,int> bfs(Point startingPos, List<Target> targets, List<List<int>> map){
   List<Point> seen = [startingPos];
   Queue<Pair<Point, int>> queue = Queue();
   queue.push(new Pair(startingPos, 0));
@@ -75,18 +75,21 @@ Map<int,int> bfs(Point startingPos, List<Target> targets, List<List<bool>> map){
 }
 
 void handlePoint(
-  List<List<bool>> map, 
+  List<List<int>> map, 
   List<Target> targets, 
   Queue<Pair<Point, int>> queue, 
   List<Point> seen, 
   Map<int,int> paths,
   int newLen, 
   Point newPoint){
-  if(map[newPoint.y][newPoint.x] && !seen.contains(newPoint)){
-    Target? t = targetsContain(targets, newPoint);
-    if(t != null){
-      paths[t.val] = newLen;
-      targets.remove(t);
+  var mapVal = map[newPoint.y][newPoint.x];
+  if(mapVal != -1 && !seen.contains(newPoint)){
+    if(mapVal == 1){
+      Target? t = targetsContain(targets, newPoint);
+      if(t != null){
+        paths[t.val] = newLen;
+        targets.remove(t);
+      }
     }
     seen.add(newPoint);
     queue.push(Pair(newPoint, newLen));
