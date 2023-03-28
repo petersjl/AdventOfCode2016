@@ -14,7 +14,6 @@ Object parseInput([bool test = false]){
   input.removeAt(input.length - 1);
   List<List<bool>> map = [];
   map.add(List.filled(colLength, false));
-  Point startPos = Point(-1,-1);
   List<Target> targets = [];
   int row = 1;
   for(var line in input){
@@ -23,19 +22,19 @@ Object parseInput([bool test = false]){
     for(var char in line.characters){
       var check = int.tryParse(char);
       if(check != null){
-        if(check == 0) startPos = Point(col,row);
-        else targets.add(Target(row, col, check));
+        targets.add(Target(row, col, check));
         boolRow[col] = true;
       }
       else{
-        boolRow[col] = check == ".";
+        boolRow[col] = char == ".";
       }
       col++;
     }
     row++;
+    map.add(boolRow);
   }
   map.add(List.filled(colLength, false));
-  return [map,targets,startPos];
+  return [map,targets];
 }
 
 // The main method of the puzzle solve
@@ -43,9 +42,60 @@ void solvePuzzle(){
   var input = parseInput() as List;
   var map = input[0] as List<List<bool>>;
   var targets = input[1] as List<Target>;
-  var startPos = input[2] as Point;
   
-  for(var t in targets) print(t);
+  Map<int,Map<int,int>> allPaths = {};
+  for(var target in targets){
+    var currentTargets = targets.listWhere<Target>((element) => element != target);
+    currentTargets.remove(target);
+    allPaths[target.val] = bfs(Point(target.col, target.row), currentTargets, map);
+  }
+
+  print(allPaths);
+}
+
+Map<int,int> bfs(Point startingPos, List<Target> targets, List<List<bool>> map){
+  List<Point> seen = [startingPos];
+  Queue<Pair<Point, int>> queue = Queue();
+  queue.push(new Pair(startingPos, 0));
+  Map<int,int> paths = {};
+  while(!queue.isEmpty && !targets.isEmpty){
+    Pair current = queue.pop();
+    int newLen = current.second + 1;
+    Point currentPos = current.first;
+    Point up = Point(currentPos.x, currentPos.y - 1);
+    Point down = Point(currentPos.x, currentPos.y + 1);
+    Point left = Point(currentPos.x - 1, currentPos.y);
+    Point right = Point(currentPos.x + 1, currentPos.y);
+    handlePoint(map, targets, queue, seen, paths, newLen, up);
+    handlePoint(map, targets, queue, seen, paths, newLen, down);
+    handlePoint(map, targets, queue, seen, paths, newLen, left);
+    handlePoint(map, targets, queue, seen, paths, newLen, right);
+  }
+  return paths;
+}
+
+void handlePoint(
+  List<List<bool>> map, 
+  List<Target> targets, 
+  Queue<Pair<Point, int>> queue, 
+  List<Point> seen, 
+  Map<int,int> paths,
+  int newLen, 
+  Point newPoint){
+  if(map[newPoint.y][newPoint.x] && !seen.contains(newPoint)){
+    Target? t = targetsContain(targets, newPoint);
+    if(t != null){
+      paths[t.val] = newLen;
+      targets.remove(t);
+    }
+    seen.add(newPoint);
+    queue.push(Pair(newPoint, newLen));
+  }
+}
+
+Target? targetsContain(List<Target> targets, Point point){
+  var found = targets.listWhere<Target>((Target element) => element.row == point.y && element.col == point.x);
+  return found.length > 0 ? found[0] : null;
 }
 
 class Target{
@@ -54,6 +104,9 @@ class Target{
   int val;
 
   Target(this.row, this.col, this.val);
+
+  @override
+  int get hashCode => toString().hashCode;
 
   @override
   String toString() {
