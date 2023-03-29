@@ -136,8 +136,8 @@ class Building{
   // Make sure there are no unpaired chips on a floor with an unpaired generator
   bool CheckValid(){
     for(var floor in floors){
-      var chips = floor.listWhere<Pair<bool, String>>((element) => element.first); // Get all the chips on a floor
-      var gens = floor.listWhere<Pair<bool, String>>((element) => !element.first); // Get all the generators on a floor
+      var chips = floor.listWhere((element) => element.first); // Get all the chips on a floor
+      var gens = floor.listWhere((element) => !element.first); // Get all the generators on a floor
       var hasGens = gens.length > 0;
       for(int i = 0; i < chips.length;){ // For each chip
         Pair chip = chips[i];
@@ -196,8 +196,8 @@ class Building{
   String lineString(int index){
     StringBuffer str = StringBuffer();
     var floor = floors[index];
-    var chips = floor.listWhere<Pair<bool, String>>((element) => element.first);
-    var gens = floor.listWhere<Pair<bool, String>>((element) => !element.first);
+    var chips = floor.listWhere((element) => element.first);
+    var gens = floor.listWhere((element) => !element.first);
     while(chips.length > 0){
       Pair<bool, String> lowest = chips[0];
       int lowi = 0;

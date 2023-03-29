@@ -33,16 +33,16 @@ extension StringExtras on String{
   }
 }
 
-extension GenericListExtras on List{
-  List<T> listMap<T>(Function fun){
-    List<T> list = [];
-    for(Object e in this){
+extension GenericListExtras<T> on List<T>{
+  List<Tout> listMap<Tout>(Tout fun(T element)){
+    List<Tout> list = [];
+    for(T e in this){
       list.add(fun(e));
     }
     return list;
   }
 
-  List<T> listWhere<T>(bool fun(T element)){
+  List<T> listWhere(bool fun(T element)){
     List<T> list = [];
     for(T e in this){
       if(fun(e)) list.add(e);
@@ -50,8 +50,8 @@ extension GenericListExtras on List{
     return list;
   }
 
-  dynamic whereFirst(bool fun(element)){
-    for(Object e in this) if(fun(e)) return e;
+  dynamic whereFirst(bool fun(T element)){
+    for(T e in this) if(fun(e)) return e;
     return null;
   }
 }

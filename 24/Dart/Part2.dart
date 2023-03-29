@@ -46,7 +46,7 @@ void solvePuzzle(){
   
   Map<int,Map<int,int>> allPaths = {};
   for(var target in targets){
-    var currentTargets = targets.listWhere<Target>((element) => element != target);
+    var currentTargets = targets.listWhere((element) => element != target);
     currentTargets.remove(target);
     allPaths[target.val] = bfs(Point(target.col, target.row), currentTargets, map);
   }
@@ -73,7 +73,7 @@ int tsp(int current, List<int> nodes, Map<int,Map<int,int>> dist, Map<int,Map<St
   
   int low = 100000;
   for(var node in nodes){
-    var toCheck = nodes.listWhere<int>((element) => element != node);
+    var toCheck = nodes.listWhere((element) => element != node);
     low = min(low, tsp(node, toCheck, dist, memo) + dist[current]![node]!);
   }
 
@@ -131,7 +131,7 @@ void handlePoint(
 }
 
 Target? targetsContain(List<Target> targets, Point point){
-  var found = targets.listWhere<Target>((Target element) => element.row == point.y && element.col == point.x);
+  var found = targets.listWhere((Target element) => element.row == point.y && element.col == point.x);
   return found.length > 0 ? found[0] : null;
 }
 
