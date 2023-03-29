@@ -26,3 +26,4 @@ Calendar:
 - Day 22: Grid Computing
 - Day 23: Safe Cracking
 - Day 24: Air Duct Spelunking
+- Day 25: Clock Signal
