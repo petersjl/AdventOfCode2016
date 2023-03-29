@@ -42,15 +42,10 @@ void solvePuzzle(){
   queue.enqueue(Pair(0,start)); // Start with the given building with zero steps
   seen.add(start.identity()); // Mark that we have seen it
   Pair<int, Building>? found;
-  var runningIndex = 0;
   while(queue.length != 0){
     Pair currentPair = queue.dequeue(); // Pop the best candidate
     int currentIndex = currentPair.first;
     Building currentBuild = currentPair.second;
-    if(currentIndex > runningIndex){
-      runningIndex = currentIndex;
-      print('Now checking move $runningIndex'); // If we moved to a new step, print it (print tracking)
-    }
     var moves = currentBuild.getAllMoves(); // Get all valid moves from the current state
     for(var move in moves){
       var newPair = Pair(currentIndex + 1, move);
@@ -66,7 +61,7 @@ void solvePuzzle(){
   }
   if(found == null) print('No valud solutions found');
   else {
-    found.second.printPath();
+    // found.second.printPath();
     print('Solution found in ${found.first} moves');
   }
 }
