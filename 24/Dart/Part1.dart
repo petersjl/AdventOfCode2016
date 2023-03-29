@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 import '../../DartUtils.dart';
 
 void main(){
@@ -39,7 +40,7 @@ Object parseInput([bool test = false]){
 
 // The main method of the puzzle solve
 void solvePuzzle(){
-  var input = parseInput(true) as List;
+  var input = parseInput() as List;
   var map = input[0] as List<List<int>>;
   var targets = input[1] as List<Target>;
   
@@ -50,7 +51,40 @@ void solvePuzzle(){
     allPaths[target.val] = bfs(Point(target.col, target.row), currentTargets, map);
   }
 
-  print(allPaths);
+  var nodes = targets.listMap<int>((t) => (t as Target).val);
+  Map<int,Map<String,int>> memo = {};
+  for(var node in nodes) memo[node] = {};
+  nodes.remove(0);
+  var min = tsp(0, nodes, allPaths, memo);
+
+  print("The min distance is $min");
+}
+
+int tsp(int current, List<int> nodes, Map<int,Map<int,int>> dist, Map<int,Map<String, int>> memo){
+  // Base case
+  if(nodes.length == 1){
+    return dist[current]![nodes[0]]!;
+  }
+
+  // memo check
+  var nString = intString(nodes);
+  var check = memo[current]![nString];
+  if(check != null) return check;
+  
+  int low = 100000;
+  for(var node in nodes){
+    var toCheck = nodes.listWhere<int>((element) => element != node);
+    low = min(low, tsp(node, toCheck, dist, memo) + dist[current]![node]!);
+  }
+
+  memo[current]![nString] = low;
+  return low;
+}
+
+String intString(List<int> nums){
+  var buf = StringBuffer();
+  buf.writeAll(nums);
+  return buf.toString();
 }
 
 Map<int,int> bfs(Point startingPos, List<Target> targets, List<List<int>> map){
